@@ -313,7 +313,8 @@ const AuthenticationManager = {
       // if admin filter is set - only set admin for user in ldap group
       // does not matter - admin is deactivated: managed through ldap
       if (process.env.LDAP_ADMIN_GROUP_FILTER) {
-        const adminfilter = '(&' + process.env.LDAP_ADMIN_GROUP_FILTER + '(' +ldapEscape.filter`uid=${uid}` + '))' 
+        const  adminfilter = '(&' + process.env.LDAP_ADMIN_GROUP_FILTER.replaceAll("%u", ldapEscape.filter`${uid}`) + ')'
+        //const adminfilter = '(&' + process.env.LDAP_ADMIN_GROUP_FILTER + '(' +ldapEscape.filter`uid=${uid}` + '))'
         adminEntry = await client.search(ldap_base, {
           scope: 'sub',
           filter: adminfilter,
